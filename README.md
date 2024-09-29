@@ -1,2 +1,2 @@
 # Sapper
-Second C++ 2D game
+Old second C++ 2D game. Moved from deprecated repository.
