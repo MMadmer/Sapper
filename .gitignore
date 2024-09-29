@@ -1,3 +1,11 @@
+# IDE
+.idea
+.vs
+
+# Build
+Saper\Release
+Sapper*.zip
+
 # Prerequisites
 *.d
 
