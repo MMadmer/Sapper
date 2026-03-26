@@ -39,8 +39,6 @@ The scripts download SFML `3.0.2` automatically if it is missing.
 
 The executable is created in `build/<preset>/`.
 
-Assets are copied next to the executable automatically.
-
 ## Controls
 
 - Left mouse button: open a cell

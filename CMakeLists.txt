@@ -30,22 +30,29 @@ set(SFML_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(SFML_BUILD_TEST_SUITE OFF CACHE BOOL "" FORCE)
 set(SFML_CONFIGURE_EXTRAS OFF CACHE BOOL "" FORCE)
 set(SFML_GENERATE_PDB OFF CACHE BOOL "" FORCE)
+set(FETCHCONTENT_BASE_DIR "${CMAKE_BINARY_DIR}/.deps" CACHE PATH "" FORCE)
 
-add_subdirectory("${SAPPER_SFML_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/_deps/sfml")
+set(SAPPER_RUNTIME_DIR "${SAPPER_RUNTIME_DIR}" CACHE PATH "Directory for the runnable game output")
+if(NOT SAPPER_RUNTIME_DIR)
+    set(SAPPER_RUNTIME_DIR "${CMAKE_BINARY_DIR}/runtime" CACHE PATH "Directory for the runnable game output" FORCE)
+endif()
 
-message(STATUS "SFML ${SAPPER_SFML_VERSION} is pinned for the build and the game sources target SFML 3 while keeping the original gameplay logic largely intact.")
+add_subdirectory("${SAPPER_SFML_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/.deps/sfml")
 
 add_executable(sapper WIN32
-    Saper/main.cpp
-    Saper/cell.cpp
-    Saper/globals.cpp
-    Saper/cell.h
-    Saper/globals.h
-    Saper/Sapper1.rc
-    Saper/resource1.h
+    Saper/src/main.cpp
+    Saper/src/app/GameApp.cpp
+    Saper/src/game/Board.cpp
+    Saper/src/render/Assets.cpp
+    Saper/include/sapper/app/GameApp.hpp
+    Saper/include/sapper/game/Board.hpp
+    Saper/include/sapper/game/Difficulty.hpp
+    Saper/include/sapper/render/Assets.hpp
+    Saper/resources/windows/Sapper.rc
+    Saper/resources/windows/resource.h
 )
 
-target_include_directories(sapper PRIVATE "${CMAKE_SOURCE_DIR}/Saper")
+target_include_directories(sapper PRIVATE "${CMAKE_SOURCE_DIR}/Saper/include")
 target_link_libraries(sapper PRIVATE SFML::Graphics)
 
 if(WIN32)
@@ -54,10 +61,18 @@ endif()
 
 set_target_properties(sapper PROPERTIES
     OUTPUT_NAME "Sapper"
+    RUNTIME_OUTPUT_DIRECTORY "${SAPPER_RUNTIME_DIR}"
+    PDB_OUTPUT_DIRECTORY "${SAPPER_RUNTIME_DIR}"
+    COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/.pdb"
 )
 
 add_custom_command(TARGET sapper POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${CMAKE_SOURCE_DIR}/Saper/assets"
-            "$<TARGET_FILE_DIR:sapper>/assets"
+    COMMAND ${CMAKE_COMMAND} -E rm -rf "$<TARGET_FILE_DIR:sapper>/assets"
+    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:sapper>/assets"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_SOURCE_DIR}/Saper/assets/tileset.png"
+            "$<TARGET_FILE_DIR:sapper>/assets/tileset.png"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_SOURCE_DIR}/Saper/assets/Context_Reprise_SSi.ttf"
+            "$<TARGET_FILE_DIR:sapper>/assets/Context_Reprise_SSi.ttf"
 )
