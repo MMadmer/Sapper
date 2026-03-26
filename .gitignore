@@ -1,40 +1,58 @@
 # IDE
-.idea
-.vs
+/.idea/
+/.vs/
+**/.vs/
+*.suo
+*.user
+*.VC.db
+*.VC.opendb
+*.aps
 
-# Build
-Saper\Release
-Sapper*.zip
+# Build directories
+/build/
+/out/
+/cmake-build-*/
+/Saper/Debug/
+/Saper/Release/
+/Saper/x64/
+/Saper/x86/
+/Saper/Saper/Debug/
+/Saper/Saper/Release/
+/Saper/Saper/x64/
+/Saper/Saper/x86/
+/CMakeFiles/
+/CMakeCache.txt
+/compile_commands.json
+/Testing/
+/install/
+/_deps/
 
-# Prerequisites
+# Local dependency checkouts
+/.deps/
+
+# C/C++ artifacts
 *.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
 *.gch
 *.pch
-
-# Compiled Dynamic libraries
+*.obj
+*.o
+*.lo
+*.slo
+*.ilk
+*.pdb
+*.idb
+*.exp
+*.lib
+*.a
 *.so
 *.dylib
 *.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
 *.exe
 *.out
 *.app
+
+# CMake user presets
+/CMakeUserPresets.json
+
+# Archives
+/Sapper*.zip
